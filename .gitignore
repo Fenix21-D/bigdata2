@@ -1,0 +1,31 @@
+# Ignorar entorno virtual
+venvmongo/
+
+# Ignorar archivos del sistema
+*.DS_Store
+Thumbs.db
+
+# Ignorar archivos de Python compilados
+*.pyc
+__pycache__/
+
+# Ignorar configuraciones de IDEs y editores
+.vscode/
+.idea/
+
+# Ignorar logs y archivos temporales
+*.log
+*.tmp
+
+# Ignorar bases de datos locales
+*.sqlite3
+
+# Ignorar archivos de configuración del entorno
+.env
+.venv
+
+# Ignorar archivos de migraciones de Django
+migrations/
+
+# Ignorar archivos de dependencias
+Pipfile.lock
