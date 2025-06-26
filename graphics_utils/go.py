@@ -17,6 +17,7 @@ def multi_line(**kwargs):
     """
     # Crear la figura
     fig = go.Figure()
+    
 
     # Colores predefinidos (se puede expandir o hacer dinámico)
     colors = [
@@ -42,6 +43,75 @@ def multi_line(**kwargs):
         yaxis_title="Valor",
         template="ggplot2",
         legend=dict(title="Series"),
+    )
+    
+    return fig
+
+
+
+def plot_time_series(series_dict, width=1200, height=600, title="", xaxis_title="Fecha", 
+                     yaxis_title="Valor", template="plotly_white", line_width=2, 
+                     opacity=1.0, legend_title="Series"):
+    """
+    Crea un gráfico de líneas para múltiples series temporales.
+    
+    Parámetros:
+    - series_dict: Diccionario con {nombre_serie: serie_pandas}
+    - width: Ancho en píxeles (default 1200)
+    - height: Alto en píxeles (default 600)
+    - title: Título del gráfico
+    - xaxis_title: Título del eje X
+    - yaxis_title: Título del eje Y
+    - template: Plantilla de Plotly
+    - line_width: Grosor de línea
+    - opacity: Opacidad de las líneas
+    - legend_title: Título de la leyenda
+    
+    Retorna:
+    - Figura de Plotly
+    """
+    fig = go.Figure()
+    
+    # Colores predefinidos
+    colors = [
+        "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+        "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+    ]
+    
+    # Verificar y agregar cada serie
+    for i, (name, serie) in enumerate(series_dict.items()):
+        if not isinstance(serie, pd.Series):
+            raise ValueError(f"'{name}' no es una serie válida. Debe ser una Serie de pandas.")
+        
+        # Convertir a numpy array si es necesario para evitar problemas
+        x_values = serie.index.to_numpy() if hasattr(serie.index, 'to_numpy') else serie.index
+        y_values = serie.to_numpy() if hasattr(serie, 'to_numpy') else serie.values
+        
+        color = colors[i % len(colors)]
+        
+        fig.add_trace(go.Scatter(
+            x=x_values,
+            y=y_values,
+            mode='lines',
+            name=name,
+            line=dict(
+                color=color,
+                width=line_width
+            ),
+            opacity=opacity
+        ))
+    
+    # Configurar diseño
+    fig.update_layout(
+        title=title,
+        xaxis_title=xaxis_title,
+        yaxis_title=yaxis_title,
+        width=width,
+        height=height,
+        template=template,
+        legend_title=legend_title,
+        hovermode='x unified',
+        margin=dict(l=50, r=50, b=50, t=80, pad=4)
     )
     
     return fig
